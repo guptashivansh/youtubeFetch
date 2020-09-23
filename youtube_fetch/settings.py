@@ -38,9 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    #app
+    'task',
 
     #External Package
-    'django_cron'
+    'django_cron',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -51,6 +54,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CRON_CLASSES = [
+    "task.scheduler.fetchYoutubeVideoData"
 ]
 
 ROOT_URLCONF = 'youtube_fetch.urls'
