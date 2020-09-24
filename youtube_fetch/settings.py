@@ -40,13 +40,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
 
     #app
     'task',
 
     #External Package
+    'django_filters',
     'django_cron',
-    'rest_framework'
+    'rest_framework',
+
 ]
 
 MIDDLEWARE = [

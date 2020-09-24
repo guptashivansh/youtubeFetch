@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.search import SearchVectorField
 # Create your models here.
 
 class Videos(models.Model):
@@ -11,9 +12,11 @@ class Videos(models.Model):
     channel_id          = models.CharField(null=False, blank=False,max_length=500)
     channel_title       = models.CharField(null=True, blank=True, max_length=500)
     created             = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    title_vector        = SearchVectorField(null=True)
+    description_vector  = SearchVectorField(null=True)
 
     class Meta:
-        indexes = [
-            models.Index(fields=['title', 'description']),
-            models.Index(fields=['description'], name='description_idx'),
-        ]
+        indexes = [GinIndex(fields=[
+                    'description_vector',
+                    'title_vector',
+                ])]
