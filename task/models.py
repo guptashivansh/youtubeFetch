@@ -11,3 +11,9 @@ class Videos(models.Model):
     channel_id          = models.CharField(null=False, blank=False,max_length=500)
     channel_title       = models.CharField(null=True, blank=True, max_length=500)
     created             = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['title', 'description']),
+            models.Index(fields=['description'], name='description_idx'),
+        ]
