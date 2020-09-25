@@ -106,7 +106,7 @@ WSGI_APPLICATION = 'youtube_fetch.wsgi.application'
 
 DATABASES = {}
 
-DATABASES['default'] = dj_database_url.config(default='postgres://hepdgjixzqinld:686b5041f55455607422fa44b768b2d894574cd661854b94cdbc60d45892ca38@ec2-34-235-108-68.compute-1.amazonaws.com:5432/d644e4l2o955st')
+DATABASES['default'] = dj_database_url.config(default=os.getenv('POSTGRES_HEROKU_URI'))
 
 
 # Password validation
