@@ -18,7 +18,7 @@ class Videos(models.Model):
     #Added indexes to Postgres DB
     # https://www.postgresql.org/docs/current/textsearch-indexes.html
     # I have used GIN Indexes because they work  etter than normal indexes in case of text search, i.e, search where composite 
-    # values( title and description in our case).
+    # values( title and description in our case). The  fields chosen are search vector fields on which searching would be done.
     class Meta:
         indexes = [GinIndex(fields=[
                     'description_vector',
