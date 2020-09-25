@@ -11,6 +11,8 @@ django = "*"
 djangorestframework = "*"
 python-dotenv = "*"
 django-filter = "*"
+gunicorn = "*"
+django-heroku = "*"
 
 [requires]
 python_version = "3.8"
