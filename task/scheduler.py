@@ -2,7 +2,10 @@ from django_cron import CronJobBase, Schedule
 import os
 
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+
 from .models import *
+from datetime import datetime, timedelta
 
 
 class fetchYoutubeVideoData(CronJobBase):
@@ -16,34 +19,44 @@ class fetchYoutubeVideoData(CronJobBase):
         print('Hello World')
         valid = False
         youtubeKeys = os.getenv('YOUTUBE_KEY').split(",")
+        time_now = datetime.now()
+        last_api_call = time_now -timedelta(minutes=.01)
         # print(youtubeKeys[0])
         for key in youtubeKeys:
-            service = build('youtube', 'v3', developerKey=key)
-            result = service.search().list(part="snippet",q="how to make tea",type="video",order="date",publishedAfter="2010-01-01T00:00:00Z").execute()
-            valid = True
-            # result = service.search().list(part="snippet",q="tea how",type="video",order="date").execute()
-            # result = service.search().list(part="snippet",q="tea how",type="video",order="date", publishedAfter="2019").execute()
-            # response = request.execute()
-            # print(result)
-            if valid:
-                break
+            try:
+                print(key)
+                service = build('youtube', 'v3', developerKey=key)
+                if service:
+                    request = service.search().list(part="snippet",q="how to make tea",type="video",order="date",publishedAfter="2010-01-01T00:00:00Z",maxResults=5)
+                    result = request.execute()
+                    # print(result)
+                    valid = True
+                if valid:
+                    break
+            except HttpError as err:
+                print(err)
+                code = err.resp.status
+                if not(code == 400 or code == 403):
+                    break
+            except Exception as e:
+                print(type(e))
 
-        if valid:
-            for item in result['items']:
-                    video_id = item['id']['videoId']
-                    publishedDateTime = item['snippet']['publishedAt']
-                    title = item['snippet']['title']
-                    description = item['snippet']['description']
-                    thumbnailsUrls = item['snippet']['thumbnails']['default']['url']
-                    channel_id = item['snippet']['channelId']
-                    channel_title = item['snippet']['channelTitle']
-                    print(title)
-                    Videos.objects.create(
-                        video_id=video_id,
-                        title=title,
-                        description=description,
-                        channel_id=channel_id,
-                        channel_title=channel_title,
-                        publishedDateTime=publishedDateTime,
-                        thumbnailsUrls=thumbnailsUrls,
-                    )
+    
+        for item in result['items']:
+                video_id = item['id']['videoId']
+                publishedDateTime = item['snippet']['publishedAt']
+                title = item['snippet']['title']
+                description = item['snippet']['description']
+                thumbnailsUrls = item['snippet']['thumbnails']['default']['url']
+                channel_id = item['snippet']['channelId']
+                channel_title = item['snippet']['channelTitle']
+                print(title)
+                Videos.objects.create(
+                    video_id=video_id,
+                    title=title,
+                    description=description,
+                    channel_id=channel_id,
+                    channel_title=channel_title,
+                    publishedDateTime=publishedDateTime,
+                    thumbnailsUrls=thumbnailsUrls,
+                )
