@@ -20,3 +20,8 @@ class Videos(models.Model):
                     'description_vector',
                     'title_vector',
                 ])]
+
+
+# class Keys(models.Model):
+#     key     = models.CharField(null=True, blank=True, max_length=200)
+#     value   = models.BooleanField(null=True, blank=True)
