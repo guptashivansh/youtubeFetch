@@ -27,10 +27,14 @@ class fetchYoutubeVideoData(CronJobBase):
         #     keys = os.getenv('YOUTUBE_KEY').split(",")
         #     youtubeKeys = dict((k,1) for k in keys)
             # youtubeKeys = os.getenv('YOUTUBE_KEY').split(",")
-    
-        time_now = datetime.now()
-        last_api_call = time_now -timedelta(minutes=.01)
+        # time_now = datetime.now()
+        # last_api_call = time_now -timedelta(minutes=.01)
         # print(youtubeKeys[0])
+
+
+
+        # Simple Brute force approach to run until you've found the right API key.
+        # if found, then create objects, else it would check for items and exit
         for key in youtubeKeys:
             try:
                 print(key)

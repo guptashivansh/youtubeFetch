@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
             model_name='videos',
             index=django.contrib.postgres.indexes.GinIndex(fields=['description_vector', 'title_vector'], name='task_videos_descrip_50070b_gin'),
         ),
-
+        # Added triggers for search vector field
         migrations.RunSQL(
                     '''
                     CREATE TRIGGER title_vector_update BEFORE INSERT OR UPDATE
